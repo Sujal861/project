@@ -1,0 +1,162 @@
+<div class="space-y-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Name Prediction</h2>
+        
+        <form id="predictionForm" class="space-y-4">
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                    <input type="number" id="age" name="age" min="0" max="120" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                    <select id="gender" name="gender" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                    <input type="text" id="location" name="location" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                
+                <div>
+                    <label for="education" class="block text-sm font-medium text-gray-700">Education Level</label>
+                    <select id="education" name="education" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">Select education level</option>
+                        <option value="high_school">High School</option>
+                        <option value="bachelors">Bachelor's Degree</option>
+                        <option value="masters">Master's Degree</option>
+                        <option value="phd">PhD</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="ethnicity" class="block text-sm font-medium text-gray-700">Ethnicity</label>
+                    <input type="text" id="ethnicity" name="ethnicity" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Predict Name
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div id="predictionResult" class="bg-white rounded-lg shadow-md p-6 hidden">
+        <h3 class="text-lg font-medium mb-4 text-gray-800">Prediction Results</h3>
+        
+        <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-md">
+                <h4 class="text-md font-medium mb-2">Top Predictions</h4>
+                <div id="topPredictions" class="space-y-2">
+                    <!-- Predictions will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-md">
+                <h4 class="text-md font-medium mb-2">Model Confidence</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Overall Confidence</span>
+                        <span id="overallConfidence" class="text-sm font-medium">-</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-600">Model Type</span>
+                        <span id="modelType" class="text-sm font-medium">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="errorMessage" class="bg-red-50 border border-red-200 rounded-md p-4 hidden">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i data-lucide="alert-circle" class="h-5 w-5 text-red-400"></i>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800" id="errorTitle">Error</h3>
+                <div class="mt-2 text-sm text-red-700" id="errorDescription">
+                    <p>An error occurred while making the prediction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('predictionForm');
+        const resultDiv = document.getElementById('predictionResult');
+        const errorDiv = document.getElementById('errorMessage');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const data = {
+                age: parseInt(formData.get('age')),
+                gender: formData.get('gender'),
+                location: formData.get('location'),
+                education: formData.get('education'),
+                ethnicity: formData.get('ethnicity')
+            };
+            
+            // Hide previous results and errors
+            resultDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            
+            // Make prediction request
+            fetch('/api/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to make prediction');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Show results
+                resultDiv.classList.remove('hidden');
+                
+                // Update top predictions
+                const predictionsDiv = document.getElementById('topPredictions');
+                predictionsDiv.innerHTML = data.predictions
+                    .map((pred, index) => `
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">${index + 1}. ${pred.name}</span>
+                            <span class="text-sm font-medium">${(pred.confidence * 100).toFixed(1)}%</span>
+                        </div>
+                    `).join('');
+                
+                // Update model info
+                document.getElementById('overallConfidence').textContent = `${(data.metadata.overall_confidence * 100).toFixed(1)}%`;
+                document.getElementById('modelType').textContent = data.metadata.model_type;
+            })
+            .catch(error => {
+                // Show error
+                document.getElementById('errorTitle').textContent = 'Error';
+                document.getElementById('errorDescription').textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            });
+        });
+    });
+</script> 

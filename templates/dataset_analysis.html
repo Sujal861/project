@@ -1,0 +1,231 @@
+<div class="space-y-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Dataset Analysis</h2>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-lg font-medium mb-3">Dataset Overview</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Total Records</span>
+                        <span id="totalRecords" class="text-sm">0</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Unique Names</span>
+                        <span id="uniqueNames" class="text-sm">0</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Average Age</span>
+                        <span id="averageAge" class="text-sm">0</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Data Quality Score</span>
+                        <span id="dataQualityScore" class="text-sm">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-lg font-medium mb-3">Data Distribution</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium">Gender Distribution</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>Male</span>
+                                    <span id="malePercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="maleBar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>Female</span>
+                                    <span id="femalePercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="femaleBar" class="bg-pink-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium">Education Level</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>High School</span>
+                                    <span id="highSchoolPercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="highSchoolBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>Bachelor's</span>
+                                    <span id="bachelorsPercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="bachelorsBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>Master's</span>
+                                    <span id="mastersPercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="mastersBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-gray-500">
+                                    <span>PhD</span>
+                                    <span id="phdPercentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="phdBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h3 class="text-lg font-medium mb-3">Geographic Distribution</h3>
+            
+            <div id="mapContainer" class="h-64 bg-gray-100 rounded-lg">
+                <!-- Map will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h3 class="text-lg font-medium mb-3">Age Distribution</h3>
+            
+            <div id="ageDistribution" class="h-64">
+                <!-- Age distribution chart will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h3 class="text-lg font-medium mb-3">Ethnicity Distribution</h3>
+            
+            <div id="ethnicityDistribution" class="h-64">
+                <!-- Ethnicity distribution chart will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="noDataMessage" class="h-64 flex items-center justify-center">
+        <div class="text-center p-6 border border-dashed border-gray-300 rounded-md bg-gray-50 max-w-md mx-auto">
+            <i data-lucide="database" class="mx-auto text-gray-400 mb-4" style="width: 48px; height: 48px;"></i>
+            <h3 class="text-lg font-medium text-gray-700 mb-2">No Dataset Available</h3>
+            <p class="text-gray-500">
+                Please upload a dataset to view the analysis.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize charts when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize map
+        initMap();
+        
+        // Initialize charts
+        initAgeDistribution();
+        initEthnicityDistribution();
+        
+        // Load dataset stats
+        loadDatasetStats();
+    });
+    
+    // Function to initialize the map
+    function initMap() {
+        // Map initialization code will go here
+    }
+    
+    // Function to initialize age distribution chart
+    function initAgeDistribution() {
+        // Age distribution chart initialization code will go here
+    }
+    
+    // Function to initialize ethnicity distribution chart
+    function initEthnicityDistribution() {
+        // Ethnicity distribution chart initialization code will go here
+    }
+    
+    // Function to load dataset statistics
+    function loadDatasetStats() {
+        fetch('/api/dataset/stats')
+            .then(response => response.json())
+            .then(data => {
+                updateDatasetStats(data);
+            })
+            .catch(error => {
+                console.error('Error loading dataset stats:', error);
+            });
+    }
+    
+    // Function to update dataset statistics
+    function updateDatasetStats(data) {
+        // Update overview stats
+        document.getElementById('totalRecords').textContent = data.total_records.toLocaleString();
+        document.getElementById('uniqueNames').textContent = data.unique_names.toLocaleString();
+        document.getElementById('averageAge').textContent = data.average_age.toFixed(1);
+        document.getElementById('dataQualityScore').textContent = `${(data.data_quality_score * 100).toFixed(1)}%`;
+        
+        // Update gender distribution
+        document.getElementById('malePercentage').textContent = `${(data.gender_distribution.male * 100).toFixed(1)}%`;
+        document.getElementById('femalePercentage').textContent = `${(data.gender_distribution.female * 100).toFixed(1)}%`;
+        document.getElementById('maleBar').style.width = `${data.gender_distribution.male * 100}%`;
+        document.getElementById('femaleBar').style.width = `${data.gender_distribution.female * 100}%`;
+        
+        // Update education distribution
+        document.getElementById('highSchoolPercentage').textContent = `${(data.education_distribution.high_school * 100).toFixed(1)}%`;
+        document.getElementById('bachelorsPercentage').textContent = `${(data.education_distribution.bachelors * 100).toFixed(1)}%`;
+        document.getElementById('mastersPercentage').textContent = `${(data.education_distribution.masters * 100).toFixed(1)}%`;
+        document.getElementById('phdPercentage').textContent = `${(data.education_distribution.phd * 100).toFixed(1)}%`;
+        
+        document.getElementById('highSchoolBar').style.width = `${data.education_distribution.high_school * 100}%`;
+        document.getElementById('bachelorsBar').style.width = `${data.education_distribution.bachelors * 100}%`;
+        document.getElementById('mastersBar').style.width = `${data.education_distribution.masters * 100}%`;
+        document.getElementById('phdBar').style.width = `${data.education_distribution.phd * 100}%`;
+        
+        // Update charts
+        updateAgeDistribution(data.age_distribution);
+        updateEthnicityDistribution(data.ethnicity_distribution);
+        updateMap(data.geographic_distribution);
+    }
+    
+    // Function to update age distribution chart
+    function updateAgeDistribution(data) {
+        // Age distribution chart update code will go here
+    }
+    
+    // Function to update ethnicity distribution chart
+    function updateEthnicityDistribution(data) {
+        // Ethnicity distribution chart update code will go here
+    }
+    
+    // Function to update map
+    function updateMap(data) {
+        // Map update code will go here
+    }
+</script> 

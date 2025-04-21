@@ -1,7 +1,10 @@
 flask==3.0.2
-flask-sqlalchemy==3.1.1
+supabase==2.3.4
 python-dotenv==1.0.1
-scikit-learn==1.4.0
-pandas==2.2.1
+scikit-learn==1.4.1.post1
 numpy==1.26.4
+pandas==2.2.1
+tensorflow==2.15.0
+torch==2.2.1
+transformers==4.38.2
 gunicorn==21.2.0 

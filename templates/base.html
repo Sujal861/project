@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Prediction System | ML for Demographics</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="min-h-screen bg-gray-100">
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 shadow-md">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Name Prediction System</h1>
+            <p class="text-sm opacity-80">Machine Learning for Demographic Analysis</p>
+        </div>
+    </header>
+    
+    <main class="container mx-auto py-6 px-4">
+        <div class="space-y-6">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <footer class="bg-gray-800 text-gray-300 py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Name Prediction System &copy; 2025 | Privacy-First ML Analysis</p>
+            <p class="mt-1 text-gray-400 text-xs">
+                All data is processed locally and anonymized. No personal information is stored or shared.
+            </p>
+        </div>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

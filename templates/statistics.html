@@ -1,0 +1,280 @@
+{% extends "layout.html" %}
+
+{% block title %}Dataset Statistics - Name Prediction System{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Dataset Overview -->
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Dataset Overview
+            </h3>
+            <div class="mt-5">
+                <dl class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="px-4 py-5 bg-gray-50 shadow rounded-lg overflow-hidden sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Records</dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900" id="totalRecords">-</dd>
+                    </div>
+                    <div class="px-4 py-5 bg-gray-50 shadow rounded-lg overflow-hidden sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Unique Names</dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900" id="uniqueNames">-</dd>
+                    </div>
+                    <div class="px-4 py-5 bg-gray-50 shadow rounded-lg overflow-hidden sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Average Age</dt>
+                        <dd class="mt-1 text-3xl font-semibold text-gray-900" id="avgAge">-</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demographics Distribution -->
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Demographics Distribution
+            </h3>
+            <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <!-- Gender Distribution -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-500">Gender Distribution</h4>
+                    <div class="mt-2" id="genderChart"></div>
+                </div>
+                
+                <!-- Education Distribution -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-500">Education Level Distribution</h4>
+                    <div class="mt-2" id="educationChart"></div>
+                </div>
+                
+                <!-- Age Distribution -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-500">Age Distribution</h4>
+                    <div class="mt-2" id="ageChart"></div>
+                </div>
+                
+                <!-- Location Distribution -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-500">Top Locations</h4>
+                    <div class="mt-2" id="locationChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Performance -->
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Model Performance
+            </h3>
+            <div class="mt-5">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+<div class="bg-white shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Dataset Statistics</h2>
+        
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-500 border-t-transparent"></div>
+            <p class="mt-2 text-sm text-gray-500">Loading statistics...</p>
+        </div>
+
+        <!-- Statistics Content (Hidden by default) -->
+        <div id="statsContent" class="hidden space-y-8">
+            <!-- Overview -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Overview</h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm font-medium text-gray-500">Total Records</p>
+                        <p id="totalRecords" class="mt-1 text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm font-medium text-gray-500">Unique Names</p>
+                        <p id="uniqueNames" class="mt-1 text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm font-medium text-gray-500">Average Age</p>
+                        <p id="avgAge" class="mt-1 text-2xl font-semibold text-gray-900">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distributions -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Distributions</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <!-- Gender Distribution -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-2">Gender</h4>
+                        <div id="genderChart" class="h-48"></div>
+                    </div>
+
+                    <!-- Education Distribution -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-2">Education Level</h4>
+                        <div id="educationChart" class="h-48"></div>
+                    </div>
+
+                    <!-- Age Distribution -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-2">Age Groups</h4>
+                        <div id="ageChart" class="h-48"></div>
+                    </div>
+
+                    <!-- Location Distribution -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-2">Top Locations</h4>
+                        <div id="locationChart" class="h-48"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ethnicity Distribution -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Ethnicity Distribution</h3>
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div id="ethnicityChart" class="h-64"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadStatistics() {
+    try {
+        const response = await fetch('/api/statistics');
+        const stats = await response.json();
+        
+        // Update overview numbers
+        document.getElementById('totalRecords').textContent = stats.totalRecords.toLocaleString();
+        document.getElementById('uniqueNames').textContent = stats.uniqueNames.toLocaleString();
+        document.getElementById('avgAge').textContent = stats.ageDistribution.average.toFixed(1);
+
+        // Create charts
+        createGenderChart(stats.genderDistribution);
+        createEducationChart(stats.educationDistribution);
+        createAgeChart(stats.ageDistribution);
+        createLocationChart(stats.locationDistribution);
+        createEthnicityChart(stats.ethnicityDistribution);
+
+        // Hide loading, show content
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('statsContent').classList.remove('hidden');
+    } catch (error) {
+        console.error('Error loading statistics:', error);
+        alert('Failed to load statistics. Please try again later.');
+    }
+}
+
+function createGenderChart(data) {
+    new Chart(document.getElementById('genderChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{
+                data: [data.male, data.female],
+                backgroundColor: ['#4F46E5', '#EC4899']
+            }]
+        }
+    });
+}
+
+function createEducationChart(data) {
+    new Chart(document.getElementById('educationChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(data).map(key => key.replace('_', ' ').toUpperCase()),
+            datasets: [{
+                data: Object.values(data),
+                backgroundColor: '#4F46E5'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function createAgeChart(data) {
+    new Chart(document.getElementById('ageChart'), {
+        type: 'line',
+        data: {
+            labels: Object.keys(data.bins),
+            datasets: [{
+                data: Object.values(data.bins),
+                borderColor: '#4F46E5',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function createLocationChart(data) {
+    const topLocations = Object.entries(data)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5);
+
+    new Chart(document.getElementById('locationChart'), {
+        type: 'bar',
+        data: {
+            labels: topLocations.map(([location]) => location),
+            datasets: [{
+                data: topLocations.map(([,count]) => count),
+                backgroundColor: '#4F46E5'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function createEthnicityChart(data) {
+    new Chart(document.getElementById('ethnicityChart'), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(data),
+            datasets: [{
+                data: Object.values(data),
+                backgroundColor: [
+                    '#4F46E5',
+                    '#EC4899',
+                    '#10B981',
+                    '#F59E0B',
+                    '#EF4444',
+                    '#8B5CF6'
+                ]
+            }]
+        }
+    });
+}
+
+// Load statistics when the page loads
+document.addEventListener('DOMContentLoaded', loadStatistics);
+</script>
+{% endblock %} 

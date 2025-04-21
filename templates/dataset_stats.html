@@ -1,0 +1,157 @@
+<div class="space-y-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Dataset Statistics</h2>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium mb-2">Overview</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Total Records</span>
+                            <span id="totalRecords" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Unique Names</span>
+                            <span id="uniqueNames" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Average Age</span>
+                            <span id="averageAge" class="text-sm font-medium">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium mb-2">Gender Distribution</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Male</span>
+                            <span id="malePercentage" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Female</span>
+                            <span id="femalePercentage" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Other</span>
+                            <span id="otherPercentage" class="text-sm font-medium">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium mb-2">Education Level</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">High School</span>
+                            <span id="highSchoolPercentage" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Bachelor's Degree</span>
+                            <span id="bachelorsPercentage" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Master's Degree</span>
+                            <span id="mastersPercentage" class="text-sm font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">PhD</span>
+                            <span id="phdPercentage" class="text-sm font-medium">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <h3 class="text-lg font-medium mb-2">Location Distribution</h3>
+                    <div id="locationDistribution" class="space-y-2">
+                        <!-- Location percentages will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <div class="bg-gray-50 p-4 rounded-md">
+                <h3 class="text-lg font-medium mb-2">Ethnicity Distribution</h3>
+                <div id="ethnicityDistribution" class="space-y-2">
+                    <!-- Ethnicity percentages will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="errorMessage" class="bg-red-50 border border-red-200 rounded-md p-4 hidden">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <i data-lucide="alert-circle" class="h-5 w-5 text-red-400"></i>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800" id="errorTitle">Error</h3>
+                <div class="mt-2 text-sm text-red-700" id="errorDescription">
+                    <p>An error occurred while fetching dataset statistics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorDiv = document.getElementById('errorMessage');
+        
+        // Fetch dataset statistics
+        fetch('/api/dataset-stats')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch dataset statistics');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update overview
+                document.getElementById('totalRecords').textContent = data.total_records.toLocaleString();
+                document.getElementById('uniqueNames').textContent = data.unique_names.toLocaleString();
+                document.getElementById('averageAge').textContent = data.average_age.toFixed(1);
+                
+                // Update gender distribution
+                document.getElementById('malePercentage').textContent = `${(data.gender_distribution.male * 100).toFixed(1)}%`;
+                document.getElementById('femalePercentage').textContent = `${(data.gender_distribution.female * 100).toFixed(1)}%`;
+                document.getElementById('otherPercentage').textContent = `${(data.gender_distribution.other * 100).toFixed(1)}%`;
+                
+                // Update education distribution
+                document.getElementById('highSchoolPercentage').textContent = `${(data.education_distribution.high_school * 100).toFixed(1)}%`;
+                document.getElementById('bachelorsPercentage').textContent = `${(data.education_distribution.bachelors * 100).toFixed(1)}%`;
+                document.getElementById('mastersPercentage').textContent = `${(data.education_distribution.masters * 100).toFixed(1)}%`;
+                document.getElementById('phdPercentage').textContent = `${(data.education_distribution.phd * 100).toFixed(1)}%`;
+                
+                // Update location distribution
+                const locationDiv = document.getElementById('locationDistribution');
+                locationDiv.innerHTML = Object.entries(data.location_distribution)
+                    .map(([location, percentage]) => `
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">${location}</span>
+                            <span class="text-sm font-medium">${(percentage * 100).toFixed(1)}%</span>
+                        </div>
+                    `).join('');
+                
+                // Update ethnicity distribution
+                const ethnicityDiv = document.getElementById('ethnicityDistribution');
+                ethnicityDiv.innerHTML = Object.entries(data.ethnicity_distribution)
+                    .map(([ethnicity, percentage]) => `
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">${ethnicity}</span>
+                            <span class="text-sm font-medium">${(percentage * 100).toFixed(1)}%</span>
+                        </div>
+                    `).join('');
+            })
+            .catch(error => {
+                // Show error
+                document.getElementById('errorTitle').textContent = 'Error';
+                document.getElementById('errorDescription').textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            });
+    });
+</script> 

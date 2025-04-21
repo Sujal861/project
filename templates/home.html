@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - Name Prediction System{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg">
+    <div class="px-4 py-5 sm:p-6">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+                Welcome to NamePredict
+            </h1>
+            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+                Predict names based on demographic data using advanced machine learning models.
+            </p>
+            <div class="mt-5 max-w-xl mx-auto">
+                <a href="/predict" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                    Get Started
+                    <i data-lucide="arrow-right" class="ml-2 h-5 w-5"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Feature 1 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                    <i data-lucide="brain" class="h-6 w-6 text-white"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <h3 class="text-lg font-medium text-gray-900">Advanced ML Models</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Utilizes multiple machine learning algorithms for accurate predictions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                    <i data-lucide="bar-chart" class="h-6 w-6 text-white"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <h3 class="text-lg font-medium text-gray-900">Dataset Statistics</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Comprehensive analysis of the training dataset and model performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                    <i data-lucide="shield" class="h-6 w-6 text-white"></i>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <h3 class="text-lg font-medium text-gray-900">Bias Analysis</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Continuous monitoring of model bias and fairness metrics.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
