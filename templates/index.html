@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Prediction System | ML for Demographics</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 shadow-md">
+        <div class="container mx-auto">
+            <h1 class="text-2xl font-bold">Name Prediction System</h1>
+            <p class="text-sm opacity-80">Machine Learning for Demographic Analysis</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-6 px-4">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Name Prediction</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <form id="predictionForm" class="space-y-4">
+                        <div>
+                            <label for="age" class="block text-sm font-medium mb-1">Age</label>
+                            <input type="number" id="age" name="age" min="18" max="100" value="35"
+                                class="w-full px-3 py-2 border rounded-md" required>
+                        </div>
+                        
+                        <div>
+                            <label for="gender" class="block text-sm font-medium mb-1">Gender</label>
+                            <select id="gender" name="gender" class="w-full px-3 py-2 border rounded-md" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="nonbinary">Non-binary</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="location" class="block text-sm font-medium mb-1">Location</label>
+                            <select id="location" name="location" class="w-full px-3 py-2 border rounded-md" required>
+                                <option value="Northeast">Northeast</option>
+                                <option value="Midwest">Midwest</option>
+                                <option value="South">South</option>
+                                <option value="West">West</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="educationLevel" class="block text-sm font-medium mb-1">Education Level</label>
+                            <select id="educationLevel" name="educationLevel" class="w-full px-3 py-2 border rounded-md" required>
+                                <option value="high-school">High School</option>
+                                <option value="some-college">Some College</option>
+                                <option value="bachelors">Bachelor's Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="doctorate">Doctorate</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="ethnicity" class="block text-sm font-medium mb-1">Ethnicity</label>
+                            <select id="ethnicity" name="ethnicity" class="w-full px-3 py-2 border rounded-md" required>
+                                <option value="White">White</option>
+                                <option value="Black">Black</option>
+                                <option value="Hispanic">Hispanic</option>
+                                <option value="Asian">Asian</option>
+                                <option value="Middle Eastern">Middle Eastern</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" id="submitBtn"
+                            class="w-full py-2 px-4 rounded-md text-white font-medium mt-4 flex items-center justify-center bg-blue-600 hover:bg-blue-700">
+                            <i data-lucide="brain" class="mr-2"></i>
+                            Predict Name
+                        </button>
+                    </form>
+                    
+                    <div id="error" class="hidden mt-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded"></div>
+                </div>
+                
+                <div id="results" class="hidden">
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+                            <h3 class="font-semibold text-blue-800 mb-2 flex items-center">
+                                <i data-lucide="user-check" class="mr-2"></i>
+                                Prediction Results
+                            </h3>
+                            <p class="text-sm text-blue-600 mb-1" id="processingTime"></p>
+                            <p class="text-sm text-blue-600" id="confidence"></p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium mb-3">Top Name Predictions</h4>
+                            <div id="predictionsList" class="space-y-3"></div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-md">
+                            <h4 class="font-medium mb-2">Data Quality</h4>
+                            <div class="relative pt-1">
+                                <div class="flex mb-2 items-center justify-between">
+                                    <div>
+                                        <span id="dataQuality" class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200"></span>
+                                    </div>
+                                </div>
+                                <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200">
+                                    <div id="dataQualityBar" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"></div>
+                                </div>
+                            </div>
+                            <p id="dataQualityText" class="text-sm text-gray-600"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="noResults" class="h-full flex items-center justify-center">
+                    <div class="text-center p-6 border border-dashed border-gray-300 rounded-md bg-gray-50 max-w-md mx-auto">
+                        <i data-lucide="user" class="mx-auto text-gray-400 mb-4" style="width: 48px; height: 48px;"></i>
+                        <h3 class="text-lg font-medium text-gray-700 mb-2">No Predictions Yet</h3>
+                        <p class="text-gray-500">
+                            Fill out the demographic information and click "Predict Name" to get name predictions based on the provided data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-300 py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Name Prediction System &copy; 2025 | Privacy-First ML Analysis</p>
+            <p class="mt-1 text-gray-400 text-xs">
+                All data is processed locally and anonymized. No personal information is stored or shared.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Form submission handler
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const errorDiv = document.getElementById('error');
+            const resultsDiv = document.getElementById('results');
+            const noResultsDiv = document.getElementById('noResults');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="brain" class="mr-2 animate-pulse"></i> Predicting...';
+            lucide.createIcons();
+            
+            try {
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to make prediction');
+                }
+                
+                const result = await response.json();
+                
+                // Update UI with results
+                document.getElementById('processingTime').textContent = 
+                    `Processed in ${result.metadata.processingTime.toFixed(2)}ms using ${result.metadata.modelUsed}`;
+                document.getElementById('confidence').textContent = 
+                    `Overall Confidence: ${(result.metadata.confidence * 100).toFixed(1)}%`;
+                
+                // Update predictions list
+                const predictionsList = document.getElementById('predictionsList');
+                predictionsList.innerHTML = result.names.map(pred => `
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-md border border-gray-200">
+                        <div class="flex items-center">
+                            <div class="bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center mr-3">
+                                <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <span class="font-medium">${pred.name}</span>
+                        </div>
+                        <div class="flex flex-col items-end">
+                            <span class="font-bold ${getConfidenceColor(pred.confidence)}">
+                                ${(pred.confidence * 100).toFixed(1)}%
+                            </span>
+                            <span class="text-xs text-gray-500">Rank #${pred.rank}</span>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+                
+                // Update data quality
+                const dataQuality = result.metadata.dataQuality;
+                document.getElementById('dataQuality').textContent = `${(dataQuality * 100).toFixed(0)}%`;
+                document.getElementById('dataQualityBar').style.width = `${dataQuality * 100}%`;
+                
+                const dataQualityText = document.getElementById('dataQualityText');
+                if (dataQuality > 0.8) {
+                    dataQualityText.textContent = 'High quality data with good demographic representation.';
+                } else if (dataQuality > 0.6) {
+                    dataQualityText.textContent = 'Moderate data quality. Some demographic groups may be underrepresented.';
+                } else {
+                    dataQualityText.textContent = 'Low data quality. Results may be less reliable for this demographic profile.';
+                }
+                
+                // Show results
+                errorDiv.classList.add('hidden');
+                resultsDiv.classList.remove('hidden');
+                noResultsDiv.classList.add('hidden');
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="brain" class="mr-2"></i> Predict Name';
+                lucide.createIcons();
+            }
+        });
+
+        function getConfidenceColor(confidence) {
+            if (confidence > 0.7) return 'text-green-600';
+            if (confidence > 0.4) return 'text-amber-600';
+            return 'text-red-600';
+        }
+    </script>
+</body>
+</html> 

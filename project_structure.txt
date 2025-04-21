@@ -1,0 +1,29 @@
+name_prediction_system/
+├── app.py                  # Main Flask application
+├── requirements.txt        # Python dependencies
+├── README.md               # Project documentation
+├── static/                 # Static assets
+│   ├── css/
+│   │   └── styles.css      # Custom CSS
+│   └── js/
+│       └── main.js         # JavaScript for frontend
+├── templates/              # HTML templates
+│   ├── index.html          # Main page
+│   ├── dashboard.html      # Dashboard component
+│   ├── prediction_form.html # Prediction form component
+│   ├── model_training.html # Model training component
+│   ├── dataset_analysis.html # Dataset analysis component
+│   └── performance_metrics.html # Performance metrics component
+├── ml/                     # Machine learning modules
+│   ├── __init__.py
+│   ├── predictor.py        # Name prediction model
+│   ├── preprocessing.py    # Data preprocessing
+│   ├── api.py              # ML API functions
+│   ├── models/             # Trained models
+│   │   └── __init__.py
+│   └── data/               # Data processing
+│       └── __init__.py
+├── types/                  # Type definitions (Python type hints)
+│   └── __init__.py         # Type definitions
+└── utils/                  # Utility functions
+    └── __init__.py 
